@@ -10,6 +10,15 @@ module.exports = function(grunt) {
       }
     },
 
+    gitpush: {
+      target: {
+        options: {
+          remote: 'live',
+          branch: 'master'
+        }
+      }
+    },
+
     mochaTest: {
       test: {
         options: {
@@ -29,19 +38,22 @@ module.exports = function(grunt) {
       target: {
         files: {
           'public/dist/<%= pkg.name %>.min.js': ['public/client/**/*.js'],
-          'public/dist/<%= pkg.name %>.min.css': ['public/client/**/*.css']
         }
       }
     },
 
     eslint: {
       target: [
-        // Add list of files to lint here
+        ['public/client/**/*.js']
       ]
     },
 
     cssmin: {
-        // Add list of files to lint here
+      target: {
+        files: {
+          'public/dist/<%= pkg.name %>.min.css': ['public/**/*.css']
+        }
+      }
     },
 
     watch: {
@@ -51,8 +63,10 @@ module.exports = function(grunt) {
           'public/lib/**/*.js',
         ],
         tasks: [
+          'eslint',
+          'test',
           'concat',
-          'uglify'
+          'uglify',
         ]
       },
       css: {
@@ -63,6 +77,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: 'git push live master'
       }
     },
   });
@@ -75,6 +90,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('server-dev', function (target) {
     grunt.task.run([ 'nodemon', 'watch' ]);
@@ -84,13 +100,15 @@ module.exports = function(grunt) {
   // Main grunt tasks
   ////////////////////////////////////////////////////
 
+
   grunt.registerTask('test', ['mochaTest']);
-  grunt.registerTask('build', ['concat', 'uglify']);
-  grunt.registerTask('default', ['build']);
+  grunt.registerTask('build', ['eslint', 'test', 'concat', 'uglify', 'cssmin']);
+  grunt.registerTask('default', ['build', 'watch']);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
+      grunt.task.run([ 'gitpush' ]);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -98,6 +116,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
       // add your production server task here
+    
   ]);
 
 
