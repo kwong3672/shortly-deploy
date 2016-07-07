@@ -2,24 +2,6 @@ var path = require('path');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/shortlyDeploy');
 
-var Schema = mongoose.Schema;
-
-var userSchema = new Schema({
-  // id: {}
-  username: { type: String, required: true, unique: true },
-  password: { type: String, require: true }
-});
-
-var linkSchema = new Schema({
-  url: String,
-  baseUrl: String,
-  code: String,
-  title: String,
-  visits: Number
-});
-
-var User = mongoose.model('User', userSchema);
-var Link = mongoose.model('Link', linkSchema);
 // var knex = require('knex')({
 //   client: 'sqlite3',
 //   connection: {
@@ -58,4 +40,4 @@ var Link = mongoose.model('Link', linkSchema);
 //   }
 // });
 
-module.exports = db;
+// module.exports = db;
