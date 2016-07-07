@@ -6,7 +6,7 @@ module.exports = function(grunt) {
       options: { seperator: ';'},
       dist: {
         src: ['public/client/**/*.js'],
-        dest: 'public/dist/<% pkg.name %>.js'
+        dest: 'public/dist/<%= pkg.name %>.js'
       }
     },
 
@@ -28,8 +28,8 @@ module.exports = function(grunt) {
     uglify: {
       target: {
         files: {
-          'public/dist/ <%= pkg.name %>.min.js': ['client/**/*.js'],
-          'public/dist/ <%= pkg.name %>.min.css': ['client/**/*.css']
+          'public/dist/<%= pkg.name %>.min.js': ['public/client/**/*.js'],
+          'public/dist/<%= pkg.name %>.min.css': ['public/client/**/*.css']
         }
       }
     },
@@ -86,7 +86,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['mochaTest']);
   grunt.registerTask('build', ['concat', 'uglify']);
-  grunt.registerTask('default', ['nodemon', 'build']);
+  grunt.registerTask('default', ['build']);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
