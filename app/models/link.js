@@ -14,6 +14,12 @@ var linkSchema = new Schema({
   }
 });
 
+linkSchema.methods.createHash = function() {
+  var shasum = crypto.createHash('sha1');
+  shasum.update(this.get('url'));
+  this.set('code', shasum.digest('hex').slice(0, 5));
+};
+
 var Link = mongoose.model('Link', linkSchema);
 
 
